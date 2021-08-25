@@ -14,48 +14,49 @@ parser = reqparse.RequestParser()
 parser.add_argument('text')
 tools = NLPTools(username=os.environ['EMAIL'], password=os.environ['PASSWORD'])
 class PredictSentiment(Resource):
+    
     def get(self):
         
+        try:
+            args = parser.parse_args()
+            user_query = args['text']
 
-        args = parser.parse_args()
-        user_query = args['text']
+            sentiment = tools.predictSentiment(user_query)
 
-        sentiment = tools.predictSentiment(user_query)
+            print(sentiment)
 
-        print(sentiment)
-
-        if(sentiment == 1):
-            return {"sentiment": "Positive"}
+            if(sentiment == 1):
+                return {"sentiment": "Positive"}
 
 
-        else:
-            return {"sentiment": "Negative"}
-        '''except Exception as e:
-            print(e)
-            return {"exception" : e}
-        '''
+            else:
+                return {"sentiment": "Negative"}
+        except Exception as e:
+            return {"exception" : repr(e)}
+        
 
 class PredictTraits(Resource):
     def get(self):
-        args = parser.parse_args()
-        user_query = args['text']
-        emotional_traits_dict = tools.predictEmotionalTraits(user_query)
-        big_5_traits_dict = tools.predictBehavior(user_query)
-        renderer = GraphRenderer(emotional_traits_dict, big_5_traits_dict)
+        try:
+            args = parser.parse_args()
+            user_query = args['text']
+            emotional_traits_dict = tools.predictEmotionalTraits(user_query)
+            big_5_traits_dict = tools.predictBehavior(user_query)
+            renderer = GraphRenderer(emotional_traits_dict, big_5_traits_dict)
 
-        renderer.big5_traits = renderer.big5_traits.apply(renderer.cleanTraitRate)
+            renderer.big5_traits = renderer.big5_traits.apply(renderer.cleanTraitRate)
 
-        emotional_traits_graph, big5_traits_graph, big5_traits_val_graph = renderer.drawBehavorialEmotionalChart()
+            emotional_traits_graph, big5_traits_graph, big5_traits_val_graph = renderer.drawBehavorialEmotionalChart()
 
-        return {
-            "big5_traits_graph": big5_traits_graph,
-            "big5_traits_val_graph": big5_traits_val_graph,
-            "emotional_traits_graph": emotional_traits_graph
-        }
-        '''except Exception as e:
+            return {
+                "big5_traits_graph": big5_traits_graph,
+                "big5_traits_val_graph": big5_traits_val_graph,
+                "emotional_traits_graph": emotional_traits_graph
+            }
+        except Exception as e:
             print(e)
-            return {"exception": e}
-        '''
+            return {"exception": repr(e)}
+        
 
 
 
