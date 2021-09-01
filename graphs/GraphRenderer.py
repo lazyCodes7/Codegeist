@@ -11,8 +11,8 @@ import plotly.io as pio
 import json
 load_dotenv() 
 # Setting up the access keys from the .env file
-os.environ["EAI_USERNAME"] = "username"
-os.environ["EAI_PASSWORD"] = "password"
+os.environ["EAI_USERNAME"] = os.environ["EMAIL"]
+os.environ["EAI_PASSWORD"] = os.environ["PASSWORD"]
 class GraphRenderer:
     def __init__(self, reviews):
         self.reviews = reviews
