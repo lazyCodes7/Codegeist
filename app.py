@@ -4,17 +4,19 @@ from flask import Flask, render_template, send_file, make_response, url_for, Res
 from flask_restful import reqparse, abort, Api, Resource
 import os
 from dotenv import load_dotenv
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 load_dotenv()
 import json
 
 app = Flask(__name__)
-CORS(app)
+cors = CORS(app, resources={r"*": {"origins": "*"}})
 api = Api(app)
 parser = reqparse.RequestParser()
 parser.add_argument('key')
 
+
 class SendGraphs(Resource):
+    @cross_origin()
     def get(self):
         try:
             args = parser.parse_args()
