@@ -28,19 +28,9 @@ class SendGraphs(Resource):
 
             big5_traits_graph, big5_traits_val_graph, emotional_traits_graph = renderer.drawBehavorialEmotionalChart()
 
-            big5_traits_graph = json.loads(big5_traits_graph)
-
-            big5_traits_val_graph = json.loads(big5_traits_val_graph)
-
-            emotional_traits_graph = json.loads(emotional_traits_graph)
-
             top_keywords = renderer.drawTopKeywords()
 
-            top_keywords = json.loads(top_keywords)
-
-
             star_dist = renderer.starDistribution()
-            star_dist = json.loads(star_dist)
 
             return {
                 "big5_traits_graph": big5_traits_graph,
