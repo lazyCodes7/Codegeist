@@ -29,7 +29,7 @@ class GraphRenderer:
 
         # Plotting and converting to json
         wordfreq = px.histogram(word_frequency,x="Top Keywords",y="Frequency",title="Top Keywords",color_discrete_sequence=px.colors.qualitative.Pastel,width=width,height=height)
-        return pio.to_html(wordfreq, include_plotlyjs=False, full_html=False)
+        return pio.to_html(wordfreq)
 
     @staticmethod
     def cleanTraitRate(text):
@@ -120,11 +120,11 @@ class GraphRenderer:
 
 
         return (
-            pio.to_html(big5_traits_graph, include_plotlyjs=False, full_html=False),
-            pio.to_html(big5_traits_val_graph, include_plotlyjs=False, full_html=False),
-            pio.to_html(emotional_traits_graph, include_plotlyjs=False, full_html=False)
+            pio.to_html(big5_traits_graph),
+            pio.to_html(big5_traits_val_graph),
+            pio.to_html(emotional_traits_graph)
         )
 
     def starDistribution(self):
         star_dist = px.pie(self.reviews, names='stars', title='Distribution of review stars',hole=.6,width=500,height=600)
-        return pio.to_html(star_dist, include_plotlyjs=False, full_html=False)
+        return pio.to_html(star_dist)
