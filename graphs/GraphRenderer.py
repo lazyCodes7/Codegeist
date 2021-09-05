@@ -110,14 +110,12 @@ class GraphRenderer:
     def drawBehavorialEmotionalChart(self):
         # Getting the emotional traits and big 5 traits from the function
         emotional_traits, big5_traits = GraphRenderer.getUserTraits(self.reviews, self.client, self.language)
-
         # Drawing a Pie Chart for getting the big 5 traits
-	big_traits_class, big_traits_count = np.unique(big5_traits.final_traits,return_counts=True)
-	big5_traits_graph = go.Figure(data = [go.Pie(labels=big_traits_class,values=big_traits_count,hole=.6,hovertemplate = 'final_traits=%{label}<extra></extra>'+'<br>Percentage=%{percent}',textinfo='label')])
-	big5_traits_graph.update_layout(title='Big5 Traits found',width=500,height=600)
+        big_traits_class, big_traits_count = np.unique(big5_traits.final_traits,return_counts=True)
+        big5_traits_graph = go.Figure(data = [go.Pie(labels=big_traits_class,values=big_traits_count,hole=.6,hovertemplate = 'final_traits=%{label}<extra></extra>'+'<br>Percentage=%{percent}',textinfo='label')])
+        big5_traits_graph.update_layout(title='Big5 Traits found',width=500,height=600)
         # Bar Plot for getting the big 5 traits along with a measure of how prevalent each trait is
-        big5_traits_val_graph = px.bar(big5_traits, x='big_5_traits', color= 'big_5_trait_rate',width=500,height=600,color_discrete_sequence=px.colors.qualitative.Pastel)
-
+        big5_traits_val_graph = px.bar(big5_traits, x='big_5_traits', color='big_5_trait_rate',width=500,height=600,color_discrete_sequence=px.colors.qualitative.Pastel)
         # Drawing the figure for emotional traits
         emotional_traits_class, emotional_traits_count = np.unique(emotional_traits.emotional_traits,return_counts=True)
         emotional_traits_graph = go.Figure(data = [go.Pie(labels=emotional_traits_class,values=emotional_traits_class,hole=.6,hovertemplate = 'emotional_traits=%{label}<extra></extra>'+'<br>Percentage=%{percent}',textinfo='label')])
