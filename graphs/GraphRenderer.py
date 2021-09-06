@@ -37,7 +37,7 @@ class GraphRenderer:
         ]
 
         # Plotting and converting to json
-        wordfreq = go.Figure(data = data, colors = px.colors.qualitative.Pastel)
+        wordfreq = go.Figure(data = data)
         return pio.to_json(wordfreq)
 
     @staticmethod
