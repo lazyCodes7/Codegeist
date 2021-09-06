@@ -29,8 +29,15 @@ class GraphRenderer:
         # Converting it to a DataFrame
         word_frequency = pd.DataFrame(cnt, columns=['Top Keywords', 'Frequency'])
 
+        data = [
+            go.Bar(
+                x = word_frequency["Top Keywords"],
+                y = word_frequency["Frequency"]
+            )
+        ]
+
         # Plotting and converting to json
-        wordfreq = px.histogram(word_frequency,x="Top Keywords",y="Frequency",title="Top Keywords",color_discrete_sequence=px.colors.qualitative.Pastel,width=width,height=height)
+        wordfreq = go.Figure(data = data, colors = px.colors.qualitative.Pastel)
         return pio.to_html(wordfreq)
 
     @staticmethod
