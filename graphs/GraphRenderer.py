@@ -38,7 +38,7 @@ class GraphRenderer:
 
         # Plotting and converting to json
         wordfreq = go.Figure(data = data, colors = px.colors.qualitative.Pastel)
-        return pio.to_html(wordfreq)
+        return pio.to_json(wordfreq)
 
     @staticmethod
     def cleanTraitRate(text):
@@ -130,9 +130,9 @@ class GraphRenderer:
 
 
         return (
-            pio.to_html(big5_traits_graph),
-            pio.to_html(big5_traits_val_graph),
-            pio.to_html(emotional_traits_graph)
+            pio.to_json(big5_traits_graph),
+            pio.to_json(big5_traits_val_graph),
+            pio.to_json(emotional_traits_graph)
         )
 
     def starDistribution(self):
@@ -140,4 +140,4 @@ class GraphRenderer:
     	star_dist = go.Figure(data = [go.Pie(labels=star,values=star_counts,hole=.6,hovertemplate = 'stars=%{label}<extra></extra>'+'<br>Percentage=%{percent}',textinfo='label')])
     	star_dist.update_layout(title='Distribution of review stars',width=500,height=600)
     	star_dist.update_traces(hoverinfo='label')
-    	return pio.to_html(star_dist)
+    	return pio.to_json(star_dist)
