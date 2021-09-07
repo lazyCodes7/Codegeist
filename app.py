@@ -32,12 +32,16 @@ class SendGraphs(Resource):
 
             star_dist = renderer.starDistribution()
 
+            positive_reviews, negative_reviews = renderer.reviews_split()
+
             return {
                 "big5_traits_graph": big5_traits_graph,
                 "big5_traits_val_graph" : big5_traits_val_graph,
                 "emotional_traits_graph" : emotional_traits_graph,
                 "star_dist" : star_dist,
-                "top_keywords" : top_keywords
+                "top_keywords" : top_keywords,
+                "positive_reviews" : positive_reviews,
+                "negative_reviews" : negative_reviews
             }
         except Exception as e:
             return {"exception" : repr(e)}

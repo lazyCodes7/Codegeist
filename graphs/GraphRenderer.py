@@ -141,3 +141,15 @@ class GraphRenderer:
     	star_dist.update_layout(title='Distribution of review stars')
     	star_dist.update_traces(hoverinfo='label')
     	return pio.to_json(star_dist)
+
+    def reviews_split(self):
+    	positive_reviews = []
+    	negative_reviews = []
+    	reviews = self.reviews.reviews.tolist()
+    	for review in reviews:
+    	    result = self.client.specific_resource_analysis(body={"document": {"text": review}},params={'language': self.language, 'resource': 'sentiment'})
+    	    if result.sentiment.overall > 0:
+    	        positive_reviews.append(review)
+    	    else:
+                negative_reviews.append(review)
+    	return positive_reviews,negative_reviews
