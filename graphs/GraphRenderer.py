@@ -152,4 +152,4 @@ class GraphRenderer:
     	        positive_reviews.append(review)
     	    else:
                 negative_reviews.append(review)
-    	return positive_reviews,negative_reviews
+    	return sorted(positive_reviews),sorted(negative_reviews)
