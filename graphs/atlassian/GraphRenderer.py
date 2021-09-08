@@ -22,7 +22,7 @@ class GraphRenderer:
         self.language = 'en'
 
 
-    def drawTopKeywords(self,width=1100,height=800):
+    def drawTopKeywords(self):
         # Counting 10 most used words from the tweets
         cnt = Counter(" ".join(self.reviews['reviews']).split()).most_common(10)
 
