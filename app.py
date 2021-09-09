@@ -7,6 +7,7 @@ from graphs.playstore.AppReviewGraphRenderer import AppReviewGraphRenderer
 import os
 from dotenv import load_dotenv
 from flask_cors import CORS, cross_origin
+from scraper.appstore.AppStoreReviewScraper import AppStoreReviewScraper
 load_dotenv()
 import json
 
@@ -15,7 +16,7 @@ cors = CORS(app, resources={r"*": {"origins": "*"}})
 api = Api(app)
 parser = reqparse.RequestParser()
 parser.add_argument('key')
-
+parser.add_argument('appname')
 class SendGraphs(Resource):
     @cross_origin()
     def get(self):
@@ -71,13 +72,33 @@ class SendAppReviewGraphs(Resource):
         except Exception as e:
             return {"exception": repr(e)}
         
-    
-        
+class SendAppStoreGraphs(Resource):
+    def get(self):
+        try:
+            args = parser.parse_args()
+            user_query = args['appname']
+            scraper = AppStoreReviewScraper(app_name = user_query)
+            scraper.get_reviews()
+            renderer = AppReviewGraphRenderer(scraper.store_reviews_df)
 
-        
+            emotional_chart, behavorial_chart = renderer.drawBehavorialEmotionalChart()
+            top_keywords_chart = renderer.drawTopKeywords()
+            rating_bar_chart = renderer.drawRatingHistogram()
+            rating_line_chart = renderer.drawRatingLinePlot()
+
+            return {
+                "emotional_chart" : emotional_chart,
+                "behavorial_chart" : behavorial_chart,
+                "top_keywords_chart" : top_keywords_chart,
+                "rating_bar_chart" : rating_bar_chart,
+                "rating_line_chart" : rating_line_chart
+            }
+        except Exception as e:
+            return {"exception": repr(e)}  
 
 api.add_resource(SendGraphs, '/atlassian')
 api.add_resource(SendAppReviewGraphs, '/playstore')
+api.add_resource(SendAppStoreGraphs, '/appstore')
 
         
 if __name__ == '__main__':

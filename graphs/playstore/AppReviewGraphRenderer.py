@@ -38,8 +38,9 @@ class AppReviewGraphRenderer:
         emotion_type = []
         detailed_emotion_type = []
         for app_reviews in self.app_reviews_df['reviews']:
-            review_summation+=app_reviews
-            review_summation+=" "
+            a_r = " ".join(app_reviews.split(" ")[:20])
+            review_summation += a_r
+            review_summation += " "
         self.review_summation = review_summation
         
         output1 = self.client.classification(body={"document": {"text":self.review_summation}}, params={'taxonomy': taxonomy2, 'language': language})
