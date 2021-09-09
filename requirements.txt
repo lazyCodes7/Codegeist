@@ -35,3 +35,4 @@ Werkzeug==2.0.
 gunicorn
 flask-cors
 google-play-scraper
+app-store-scraper
