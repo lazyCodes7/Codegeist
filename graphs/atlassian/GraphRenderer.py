@@ -121,14 +121,12 @@ class GraphRenderer:
         # Drawing a Pie Chart for getting the big 5 traits
         big_traits_class, big_traits_count = np.unique(big5_traits.final_traits,return_counts=True)
         big5_traits_graph = go.Figure(data = [go.Pie(labels=big_traits_class,values=big_traits_count,hole=.6,hovertemplate = 'final_traits=%{label}<extra></extra>'+'<br>Percentage=%{percent}',textinfo='label')])
-        #big5_traits_graph.update_layout(title='Big5 Traits found')
         big5_traits_graph.update_layout(width=500,height=500)
         # Bar Plot for getting the big 5 traits along with a measure of how prevalent each trait is
-        big5_traits_val_graph = px.bar(big5_traits, x='big_5_traits', color='big_5_trait_rate',color_discrete_sequence=px.colors.qualitative.Pastel)
+        big5_traits_val_graph = px.bar(big5_traits, x='big_5_traits', color='big_5_trait_rate',color_discrete_sequence=px.colors.qualitative.Pastel,width=500,height=500)
         # Drawing the figure for emotional traits
         emotional_traits_class, emotional_traits_count = np.unique(emotional_traits.emotional_traits,return_counts=True)
         emotional_traits_graph = go.Figure(data = [go.Pie(labels=emotional_traits_class,values=emotional_traits_class,hole=.6,hovertemplate = 'emotional_traits=%{label}<extra></extra>'+'<br>Percentage=%{percent}',textinfo='label')])
-        #emotional_traits_graph.update_layout(title='Emotional Traits found')
         emotional_traits_graph.update_layout(width=500,height=500)
 
 
@@ -141,7 +139,6 @@ class GraphRenderer:
     def starDistribution(self):
     	star , star_counts = np.unique(self.reviews.stars,return_counts = True)
     	star_dist = go.Figure(data = [go.Pie(labels=star,values=star_counts,hole=.6,hovertemplate = 'stars=%{label}<extra></extra>'+'<br>Percentage=%{percent}',textinfo='label')])
-    	#star_dist.update_layout(title='Distribution of review stars')
         star_dist.update_layout(width=500,height=500)
     	star_dist.update_traces(hoverinfo='label')
     	return pio.to_json(star_dist)
