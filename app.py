@@ -76,7 +76,7 @@ class SendAppStoreGraphs(Resource):
     def get(self):
         try:
             args = parser.parse_args()
-            user_query = args['appname']
+            user_query = args['key']
             scraper = AppStoreReviewScraper(app_name = user_query)
             scraper.get_reviews()
             renderer = AppReviewGraphRenderer(scraper.store_reviews_df)
