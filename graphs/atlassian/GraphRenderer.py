@@ -139,7 +139,7 @@ class GraphRenderer:
     def starDistribution(self):
     	star , star_counts = np.unique(self.reviews.stars,return_counts = True)
     	star_dist = go.Figure(data = [go.Pie(labels=star,values=star_counts,hole=.6,hovertemplate = 'stars=%{label}<extra></extra>'+'<br>Percentage=%{percent}',textinfo='label')])
-        star_dist.update_layout(width=500,height=500)
+    	star_dist.update_layout(width=500,height=500)
     	star_dist.update_traces(hoverinfo='label')
     	return pio.to_json(star_dist)
 
