@@ -6,6 +6,7 @@ import plotly.express as px
 import plotly.io as pio
 from expertai.nlapi.cloud.client import ExpertAiClient
 from dotenv import load_dotenv
+from textblob import TextBlob
 load_dotenv() 
 import os
 os.environ["EAI_USERNAME"] = os.environ["EMAIL"]
@@ -100,11 +101,11 @@ class AppReviewGraphRenderer:
     	negative_reviews = []
     	reviews = self.associate_reviews()
     	for review in reviews:
-    	    result = self.client.specific_resource_analysis(body={"document": {"text": review}},params={'language': 'en', 'resource': 'sentiment'})
-    	    if result.sentiment.overall > 0:
-    	        positive_reviews.append(review)
-    	    else:
-                negative_reviews.append(review)
+            analysis = TextBlob(review)
+            if analysis.sentiment.polarity > 0:
+    	        positive_reviews.append(str(review))
+            else:
+                negative_reviews.append(str(review))
     	return sorted(positive_reviews),sorted(negative_reviews)
 
     def associate_reviews(self):

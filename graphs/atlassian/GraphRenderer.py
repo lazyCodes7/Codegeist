@@ -11,6 +11,7 @@ import pandas as pd
 from dotenv import load_dotenv
 import plotly.io as pio
 import json
+from textblob import TextBlob
 load_dotenv() 
 # Setting up the access keys from the .env file
 os.environ["EAI_USERNAME"] = os.environ["EMAIL"]
@@ -148,10 +149,10 @@ class GraphRenderer:
     	negative_reviews = []
     	reviews = self.associate_reviews()
     	for review in reviews:
-    	    result = self.client.specific_resource_analysis(body={"document": {"text": review}},params={'language': self.language, 'resource': 'sentiment'})
-    	    if result.sentiment.overall > 0:
+            analysis = TextBlob(review)
+            if analysis.sentiment.polarity > 0:
     	        positive_reviews.append(review)
-    	    else:
+            else:
                 negative_reviews.append(review)
     	return sorted(positive_reviews),sorted(negative_reviews)
 
