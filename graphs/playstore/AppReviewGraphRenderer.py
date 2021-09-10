@@ -49,7 +49,7 @@ class AppReviewGraphRenderer:
         output1 = self.client.classification(body={"document": {"text":self.review_summation}}, params={'taxonomy': taxonomy2, 'language': language})
         output2 = self.client.classification(body={"document": {"text":self.review_summation}}, params={'taxonomy': taxonomy1, 'language': language})
         output3 = self.client.classification(body={"document": {"text": self.review_summation[0:1500]}}, params={'taxonomy': taxonomy3, 'language': language})
-
+        
         for category in output1.categories:
             behavior_type.append(category.hierarchy[0])
             detailed_behavior_type.append(category.hierarchy[2])

@@ -26,10 +26,14 @@ class SendGraphs(Resource):
             if 'play.google.com' in link:
                 user_query = link[link.index('=')+1:]
                 scraper = AppReviewScraper(app_id = user_query)
+                scraper.get_reviews()
+                renderer = AppReviewGraphRenderer(scraper.app_reviews_df)
                 type = "playstore"
             elif 'apps.apple.com' in link:
                 user_query = link[30:link.rindex('/')]
                 scraper = AppStoreReviewScraper(app_name = user_query)
+                scraper.get_reviews()
+                renderer = AppReviewGraphRenderer(scraper.store_reviews_df)
                 type="appstore"
             else:
                 user_query = link
@@ -56,9 +60,6 @@ class SendGraphs(Resource):
                 "negative_reviews" : negative_reviews
                }
             
-            scraper.get_reviews()
-            renderer = AppReviewGraphRenderer(scraper.app_reviews_df)
-
             emotional_chart, behavorial_chart, iptc_chart = renderer.drawBehavorialEmotionalChart()
             top_keywords_chart = renderer.drawTopKeywords()
             rating_bar_chart = renderer.drawRatingHistogram()

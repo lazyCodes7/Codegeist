@@ -10,7 +10,7 @@ class AppStoreReviewScraper:
         self.country = country
         
         self.app_name = app_name
-        self.app_reviews_df = None
+        self.store_reviews_df = None
         
         
     def get_reviews(self):
@@ -26,10 +26,10 @@ class AppStoreReviewScraper:
                 scores.append(r['rating'])
                 dates.append(r['date'])
 
-            self.app_reviews_df = pd.DataFrame({"reviews":app_reviews, "scores":scores, "dates":dates})
-            self.app_reviews_df['review_len'] = self.app_reviews_df['reviews'].apply(len)
-            self.app_reviews_df['scores'] = self.app_reviews_df['scores'].apply(str)
-            self.app_reviews_df['reviews'] = self.app_reviews_df['reviews'].apply(AppStoreReviewScraper.remove_links)
+            self.store_reviews_df = pd.DataFrame({"reviews":app_reviews, "scores":scores, "dates":dates})
+            self.store_reviews_df['review_len'] = self.store_reviews_df['reviews'].apply(len)
+            self.store_reviews_df['scores'] = self.store_reviews_df['scores'].apply(str)
+            self.store_reviews_df['reviews'] = self.store_reviews_df['reviews'].apply(AppStoreReviewScraper.remove_links)
             
     @staticmethod
     def remove_links(text):
