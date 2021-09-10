@@ -149,6 +149,7 @@ class GraphRenderer:
     	negative_reviews = []
     	reviews = self.associate_reviews()
     	for review in reviews:
+            
             analysis = TextBlob(review)
             if analysis.sentiment.polarity > 0:
     	        positive_reviews.append(review)
