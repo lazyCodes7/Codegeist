@@ -146,7 +146,7 @@ class GraphRenderer:
     def reviews_split(self):
     	positive_reviews = []
     	negative_reviews = []
-    	reviews = self.reviews.reviews.tolist()
+    	reviews = self.associate_reviews()
     	for review in reviews:
     	    result = self.client.specific_resource_analysis(body={"document": {"text": review}},params={'language': self.language, 'resource': 'sentiment'})
     	    if result.sentiment.overall > 0:
@@ -154,3 +154,18 @@ class GraphRenderer:
     	    else:
                 negative_reviews.append(review)
     	return sorted(positive_reviews),sorted(negative_reviews)
+
+    def associate_reviews(self):
+        reviews = self.reviews.reviews.tolist()
+        unique_words = set(reviews)
+        freq = {}
+        for w in unique_words:
+            freq[w] = reviews.count(w)
+        sorted_freq = dict(sorted(freq.items(), key=lambda x: x[1], reverse=True))
+        result = []
+        for r in reviews:
+            for word in sorted_freq.keys():
+                if word in r and len(r) > 10:
+                    r.replace('\n','')
+                    result.append(r)
+        return list(set(result))

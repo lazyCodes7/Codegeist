@@ -22,21 +22,65 @@ class SendGraphs(Resource):
     def get(self):
         try:
             args = parser.parse_args()
-            user_query = args['key']
+            link = args['key']
+            if 'play.google.com' in link:
+                user_query = link[link.index('=')+1:]
+                scraper = AppReviewScraper(app_id = user_query)
+                scraper.get_reviews()
+                renderer = AppReviewGraphRenderer(scraper.app_reviews_df)
+            
+                emotional_chart, behavorial_chart = renderer.drawBehavorialEmotionalChart()
+                top_keywords_chart = renderer.drawTopKeywords()
+                rating_bar_chart = renderer.drawRatingHistogram()
+                rating_line_chart = renderer.drawRatingLinePlot()
+                positive_reviews, negative_reviews = renderer.reviews_split()
+                return {
+                "type":"playstore",
+                "emotional_chart" : emotional_chart,
+                "behavorial_chart" : behavorial_chart,
+                "top_keywords_chart" : top_keywords_chart,
+                "rating_bar_chart" : rating_bar_chart,
+                "rating_line_chart" : rating_line_chart,
+                "positive_reviews" : positive_reviews,
+                "negative_reviews" : negative_reviews
+                }
+            elif 'apps.apple.com' in link:
+                user_query = link[30:link.rindex('/')]
+                scraper = AppStoreReviewScraper(app_name = user_query)
+                scraper.get_reviews()
+                renderer = AppReviewGraphRenderer(scraper.store_reviews_df)
 
-            scraper = ReviewScraper(key = user_query)
-            reviews = scraper.get_reviews()
-            renderer = GraphRenderer(reviews = reviews)
+                emotional_chart, behavorial_chart = renderer.drawBehavorialEmotionalChart()
+                top_keywords_chart = renderer.drawTopKeywords()
+                rating_bar_chart = renderer.drawRatingHistogram()
+                rating_line_chart = renderer.drawRatingLinePlot()
+                positive_reviews, negative_reviews = renderer.reviews_split()
+                return {
+                "type":"appstore",
+                "emotional_chart" : emotional_chart,
+                "behavorial_chart" : behavorial_chart,
+                "top_keywords_chart" : top_keywords_chart,
+                "rating_bar_chart" : rating_bar_chart,
+                "rating_line_chart" : rating_line_chart,
+                "positive_reviews" : positive_reviews,
+                "negative_reviews" : negative_reviews
+                }
+            else:
+                user_query = link
+                scraper = ReviewScraper(key = user_query)
+                reviews = scraper.get_reviews()
+                renderer = GraphRenderer(reviews = reviews)
 
-            big5_traits_graph, big5_traits_val_graph, emotional_traits_graph = renderer.drawBehavorialEmotionalChart()
+                big5_traits_graph, big5_traits_val_graph, emotional_traits_graph = renderer.drawBehavorialEmotionalChart()
 
-            top_keywords = renderer.drawTopKeywords()
+                top_keywords = renderer.drawTopKeywords()
 
-            star_dist = renderer.starDistribution()
+                star_dist = renderer.starDistribution()
 
-            positive_reviews, negative_reviews = renderer.reviews_split()
+                positive_reviews, negative_reviews = renderer.reviews_split()
 
-            return {
+                return {
+                "type":"atlassian",
                 "big5_traits_graph": big5_traits_graph,
                 "big5_traits_val_graph" : big5_traits_val_graph,
                 "emotional_traits_graph" : emotional_traits_graph,
@@ -44,7 +88,7 @@ class SendGraphs(Resource):
                 "top_keywords" : top_keywords,
                 "positive_reviews" : positive_reviews,
                 "negative_reviews" : negative_reviews
-            }
+               }
         except Exception as e:
             return {"exception" : repr(e)}
 class SendAppReviewGraphs(Resource):
@@ -96,9 +140,9 @@ class SendAppStoreGraphs(Resource):
         except Exception as e:
             return {"exception": repr(e)}  
 
-api.add_resource(SendGraphs, '/atlassian')
-api.add_resource(SendAppReviewGraphs, '/playstore')
-api.add_resource(SendAppStoreGraphs, '/appstore')
+api.add_resource(SendGraphs, '/analyze')
+#api.add_resource(SendAppReviewGraphs, '/playstore')
+#api.add_resource(SendAppStoreGraphs, '/appstore')
 
         
 if __name__ == '__main__':
