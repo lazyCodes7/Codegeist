@@ -32,11 +32,14 @@ class AppReviewGraphRenderer:
         review_summation = ""
         taxonomy1 = 'emotional-traits'
         taxonomy2 = 'behavioral-traits'
+        taxonomy3 = 'iptc'
         language = 'en'
         behavior_type = []
         detailed_behavior_type = []
         emotion_type = []
         detailed_emotion_type = []
+        iptc_type = []
+
         for app_reviews in self.app_reviews_df['reviews']:
             a_r = " ".join(app_reviews.split(" ")[:20])
             review_summation += a_r
@@ -45,6 +48,8 @@ class AppReviewGraphRenderer:
         
         output1 = self.client.classification(body={"document": {"text":self.review_summation}}, params={'taxonomy': taxonomy2, 'language': language})
         output2 = self.client.classification(body={"document": {"text":self.review_summation}}, params={'taxonomy': taxonomy1, 'language': language})
+        output3 = self.client.classification(body={"document": {"text": self.review_summation[0:1500]}}, params={'taxonomy': taxonomy3, 'language': language})
+
         for category in output1.categories:
             behavior_type.append(category.hierarchy[0])
             detailed_behavior_type.append(category.hierarchy[2])
@@ -53,17 +58,26 @@ class AppReviewGraphRenderer:
         for category in output2.categories:
             emotion_type.append(category.hierarchy[0])
             detailed_emotion_type.append(category.hierarchy[1])
+
+        for category in output3.categories:
+            for cat in category.hierarchy:
+                iptc_type.append(cat)
             
         e_df = pd.DataFrame({"emotion_type": emotion_type, "detailed_emotion_type": detailed_emotion_type})
         b_df = pd.DataFrame({"detailed_behavioral_type": detailed_behavior_type, "behavioral_type": behavior_type })
-        
+        i_df = pd.DataFrame({"iptc_type": iptc_type })
+
         fig1 = px.bar(b_df, x = 'behavioral_type', color = 'detailed_behavioral_type')
 
         fig2 = px.bar(e_df, x = 'emotion_type', color = 'detailed_emotion_type')
+
+        fig3 = px.bar(i_df, x = 'iptc_type', color = 'iptc_type')
+
         
         return (
             pio.to_json(fig1),
-            pio.to_json(fig2)
+            pio.to_json(fig2),
+            pio.to_json(fig3)
         )
         
         

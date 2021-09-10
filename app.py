@@ -57,9 +57,9 @@ class SendGraphs(Resource):
                }
             
             scraper.get_reviews()
-            renderer = AppReviewGraphRenderer(scraper.store_reviews_df)
+            renderer = AppReviewGraphRenderer(scraper.app_reviews_df)
 
-            emotional_chart, behavorial_chart = renderer.drawBehavorialEmotionalChart()
+            emotional_chart, behavorial_chart, iptc_chart = renderer.drawBehavorialEmotionalChart()
             top_keywords_chart = renderer.drawTopKeywords()
             rating_bar_chart = renderer.drawRatingHistogram()
             rating_line_chart = renderer.drawRatingLinePlot()
@@ -68,6 +68,7 @@ class SendGraphs(Resource):
                 "type":type,
                 "emotional_chart" : emotional_chart,
                 "behavorial_chart" : behavorial_chart,
+                "iptc_chart" : iptc_chart,
                 "top_keywords_chart" : top_keywords_chart,
                 "rating_bar_chart" : rating_bar_chart,
                 "rating_line_chart" : rating_line_chart,
